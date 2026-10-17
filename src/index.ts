@@ -24,6 +24,15 @@ app.get('/', (req : Request, res: Response) => {
 async function startServer() {
   try {
     await client.connect();
+    const db = client.db("wanderlust");
+    const destinationcollections = db.collection("destinations");
+
+    app.post('/destination', async(req, res) => {
+      const destinationData = req.body;
+      const result = await destinationcollections.insertOne(destinationData)
+      res.send(result)
+    })
+
     console.log("Successfully connected to MONGODB!");
     app.listen(PORT, () => {
       console.log(`app listening port ${PORT}`);
