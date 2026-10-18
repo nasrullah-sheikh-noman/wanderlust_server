@@ -1,12 +1,14 @@
 import dotenv from "dotenv";
 import express from "express";
-import { MongoClient } from 'mongodb';
+import cors from "cors";
+import { MongoClient, ObjectId } from 'mongodb';
 import type { Request, Response } from "express";
 dotenv.config()
 
 const app = express();
-const PORT = process.env.PORT;
-
+const PORT = Number(process.env.PORT) || 8000;
+app.use(cors());
+app.use(express.json());
 const URI = process.env.MONGODB_URI
 
 if (!URI) {
@@ -27,10 +29,37 @@ async function startServer() {
     const db = client.db("wanderlust");
     const destinationcollections = db.collection("destinations");
 
-    app.post('/destination', async(req, res) => {
+    app.get('/destinations', async(req, res) => {
+      const result = await destinationcollections.find().toArray();
+      res.json(result)
+    })
+
+    app.post('/destination', async (req, res) => {
+      console.log("req", req);
       const destinationData = req.body;
+      console.log("destinationData", destinationData);
       const result = await destinationcollections.insertOne(destinationData)
       res.send(result)
+    })
+
+    app.patch('/destinations/:id', async (req, res) => {
+      const { id } = req.params
+      const updatedData = req.body
+      console.log("updated data", updatedData);
+      const result = await destinationcollections.updateOne({ _id: new ObjectId(id) }, { $set: updatedData });
+      res.json(result)
+    })
+
+    app.get('/destinations/:id', async (req, res) => {
+      const { id } = req.params
+      const result = await destinationcollections.findOne({ _id: new ObjectId(id) });
+      res.json(result)
+    })
+
+    app.delete('/destinations/:id', async (req, res) => {
+      const { id } = req.params
+      const result = await destinationcollections.deleteOne({ _id: new ObjectId(id) });
+      res.json(result)
     })
 
     console.log("Successfully connected to MONGODB!");
