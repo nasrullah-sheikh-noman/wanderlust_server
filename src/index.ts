@@ -75,6 +75,12 @@ async function startServer() {
       res.json(result)
     })
 
+    app.delete('/booking/:bookingId', async(req, res) => {
+      const { bookingId } = req.params;
+      const result = await bookingCollectins.deleteOne({ _id: new ObjectId(bookingId) });
+      res.json(result)
+    })
+
     console.log("Successfully connected to MONGODB!");
     app.listen(PORT, () => {
       console.log(`app listening port ${PORT}`);
