@@ -28,6 +28,7 @@ async function startServer() {
     await client.connect();
     const db = client.db("wanderlust");
     const destinationcollections = db.collection("destinations");
+    const bookingCollectins = db.collection("bookings");
 
     app.get('/destinations', async(req, res) => {
       const result = await destinationcollections.find().toArray();
@@ -35,9 +36,9 @@ async function startServer() {
     })
 
     app.post('/destination', async (req, res) => {
-      console.log("req", req);
+      // console.log("req", req);
       const destinationData = req.body;
-      console.log("destinationData", destinationData);
+      // console.log("destinationData", destinationData);
       const result = await destinationcollections.insertOne(destinationData)
       res.send(result)
     })
@@ -45,7 +46,7 @@ async function startServer() {
     app.patch('/destinations/:id', async (req, res) => {
       const { id } = req.params
       const updatedData = req.body
-      console.log("updated data", updatedData);
+      // console.log("updated data", updatedData);
       const result = await destinationcollections.updateOne({ _id: new ObjectId(id) }, { $set: updatedData });
       res.json(result)
     })
@@ -59,6 +60,12 @@ async function startServer() {
     app.delete('/destinations/:id', async (req, res) => {
       const { id } = req.params
       const result = await destinationcollections.deleteOne({ _id: new ObjectId(id) });
+      res.json(result)
+    })
+
+    app.post('/booking', async (req, res) => {
+      const bookingData = req.body;
+      const result = await bookingCollectins.insertOne(bookingData);
       res.json(result)
     })
 
