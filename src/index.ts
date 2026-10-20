@@ -52,14 +52,20 @@ async function startServer() {
     })
 
     app.get('/destinations/:id', async (req, res) => {
-      const { id } = req.params
+      const { id } = req.params;
       const result = await destinationcollections.findOne({ _id: new ObjectId(id) });
       res.json(result)
     })
 
     app.delete('/destinations/:id', async (req, res) => {
-      const { id } = req.params
+      const { id } = req.params;
       const result = await destinationcollections.deleteOne({ _id: new ObjectId(id) });
+      res.json(result)
+    })
+
+    app.get('/bookings/:userId', async (req, res) => {
+      const { userId } = req.params;
+      const result = await bookingCollectins.find({userId}).toArray();
       res.json(result)
     })
 
