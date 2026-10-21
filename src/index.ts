@@ -96,7 +96,7 @@ async function startServer() {
       res.json(result);
     });
 
-    app.get("/bookings/:userId", async (req, res) => {
+    app.get("/bookings/:userId", verifyToken, async (req: Request<{userId: string}>, res) => {
       const { userId } = req.params;
       const result = await bookingCollectins.find({ userId }).toArray();
       res.json(result);
@@ -108,7 +108,7 @@ async function startServer() {
       res.json(result);
     });
 
-    app.delete("/booking/:bookingId", async (req, res) => {
+    app.delete("/booking/:bookingId", verifyToken, async (req: Request<{bookingId: string}>, res) => {
       const { bookingId } = req.params;
       const result = await bookingCollectins.deleteOne({
         _id: new ObjectId(bookingId),
