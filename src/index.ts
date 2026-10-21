@@ -35,7 +35,7 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
       new URL("http://localhost:3000/api/auth/jwks"),
     );
     const { payload } = await jwtVerify(token, JWKS);
-    console.log("payload", payload);
+    // console.log("payload", payload);
     return next()
   } catch (error) {
     console.log("error", error);
@@ -102,7 +102,7 @@ async function startServer() {
       res.json(result);
     });
 
-    app.post("/booking", async (req, res) => {
+    app.post("/booking", verifyToken, async (req, res) => {
       const bookingData = req.body;
       const result = await bookingCollectins.insertOne(bookingData);
       res.json(result);
