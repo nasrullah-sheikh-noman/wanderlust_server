@@ -7,7 +7,7 @@ import { createRemoteJWKSet, jwtVerify } from "jose";
 dotenv.config();
 
 const app = express();
-const PORT = Number(process.env.PORT) || 8000;
+const PORT = Number(process.env.PORT);
 app.use(cors());
 app.use(express.json());
 const URI = process.env.MONGODB_URI;
@@ -32,7 +32,7 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   // console.log("token", token);
   try {
     const JWKS = createRemoteJWKSet(
-      new URL("http://localhost:3000/api/auth/jwks"),
+      new URL(`${process.env.CLIENT_URL}/api/auth/jwks`),
     );
     const { payload } = await jwtVerify(token, JWKS);
     // console.log("payload", payload);
