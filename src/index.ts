@@ -7,7 +7,7 @@ import { createRemoteJWKSet, jwtVerify } from "jose";
 dotenv.config();
 
 const app = express();
-const PORT = Number(process.env.PORT);
+const PORT = Number(process.env.PORT) || 8000;
 app.use(cors());
 app.use(express.json());
 const URI = process.env.MONGODB_URI;
@@ -117,7 +117,7 @@ async function startServer() {
     });
 
     console.log("Successfully connected to MONGODB!");
-    app.listen(PORT, () => {
+    app.listen(PORT, "0.0.0.0", () => {
       console.log(`app listening port ${PORT}`);
     });
   } catch (error) {
