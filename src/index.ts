@@ -13,7 +13,7 @@ app.use(express.json());
 const URI = process.env.MONGODB_URI;
 
 if (!URI) {
-  throw new Error("MONGODB URI is missing form .env");
+  throw Error("MONGODB URI is missing form .env");
 }
 
 const client = new MongoClient(URI);
