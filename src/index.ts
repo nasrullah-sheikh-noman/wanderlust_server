@@ -50,6 +50,11 @@ async function startServer() {
     const destinationcollections = db.collection("destinations");
     const bookingCollectins = db.collection("bookings");
 
+    app.get("/featured", async (req, res) => {
+      const result = await destinationcollections.find().limit(3).toArray();
+      res.json(result);
+    })
+
     app.get("/destinations", async (req, res) => {
       const result = await destinationcollections.find().toArray();
       res.json(result);
